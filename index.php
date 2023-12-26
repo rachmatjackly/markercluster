@@ -36,12 +36,14 @@
         var locationsData = locations.features;
         locationsData.forEach(function(location) {
             var coordinates = location.geometry.coordinates;
+            var properties = location.properties.Propinsi;
 
             if(location.geometry.type == 'MultiPolygon') {
                 coordinates.forEach(function(polygon) {
                     polygon.forEach(function(ring) {
                         ring.forEach(function(coord) {
                             var marker = L.marker(new L.LatLng(coord[1], coord[0]));
+                            marker.bindPopup('<strong>Propinsi:</strong> ' + properties);
                             markers.addLayer(marker);
                         });
                     });
@@ -49,10 +51,10 @@
             }
 
             if(location.geometry.type == 'Polygon') {
-                console.log(coordinates)
                 coordinates.forEach(function(ring) {
                     ring.forEach(function(coord) {
                         var marker = L.marker(new L.LatLng(coord[1], coord[0]));
+                        marker.bindPopup('<strong>Propinsi:</strong> ' + properties);
                         markers.addLayer(marker);
                     });
                 })
