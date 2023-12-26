@@ -32,10 +32,34 @@
 
 
         var markers = L.markerClusterGroup();
-        var marker = L.geoJSON(locations);
+        // Tambahkan marker ke peta
+        var locationsData = locations.features;
+        locationsData.forEach(function(location) {
+            var coordinates = location.geometry.coordinates;
 
-        markers.addLayer(marker);
-        map.addLayer(markers) 
+            if(location.geometry.type == 'MultiPolygon') {
+                coordinates.forEach(function(polygon) {
+                    polygon.forEach(function(ring) {
+                        ring.forEach(function(coord) {
+                            var marker = L.marker(new L.LatLng(coord[1], coord[0]));
+                            markers.addLayer(marker);
+                        });
+                    });
+                });
+            }
+
+            if(location.geometry.type == 'Polygon') {
+                console.log(coordinates)
+                coordinates.forEach(function(ring) {
+                    ring.forEach(function(coord) {
+                        var marker = L.marker(new L.LatLng(coord[1], coord[0]));
+                        markers.addLayer(marker);
+                    });
+                })
+            }
+        });
+
+        map.addLayer(markers);
     </script>
 </body>
 
